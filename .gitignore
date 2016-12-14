@@ -1,0 +1,7 @@
+Data/ChIP-seq/*
+Data/phatsCons/*
+Data/PBM_2016/*
+*.pyc
+*~
+.ipynb_checkpoints/
+

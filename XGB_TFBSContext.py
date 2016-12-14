@@ -12,6 +12,8 @@ import pyBigWig
 import pysam
 pd.set_option('display.max_colwidth', -1)
 
+BASE_DIR = "/home/kipkurui/Project/PBMDNase"
+
 shape_path = "/home/kipkurui/Dream_challenge/DNAShape"
 
 human_genome = "/home/kipkurui/Dream_challenge/annotations"
@@ -29,7 +31,7 @@ def score_kmer(kmer,kmerdict,revcompl):
         score=float(kmerdict[kmer2])
     return score
 
-def energy_score_kmer(kmerdict, seq):
+def sum_kmer_score(kmerdict, seq):
     k_mers = find_kmers(seq, 8)
     tot_score = 0
     for kmer in k_mers:
@@ -42,7 +44,7 @@ def energy_score_kmer(kmerdict, seq):
         tot_score += score
     return tot_score
 
-def max_score_kmer(kmerdict, seq, pos=False):
+def max_score_kmer(kmerdict, seq):
     """
     Score the k-mers by the maximum score
     """
@@ -58,10 +60,8 @@ def max_score_kmer(kmerdict, seq, pos=False):
             #score = float(kmerdict[kmer2])
         tot_score.append(score)
     max_pos = tot_score.index(max(tot_score))
-    if pos:
-        return max(tot_score), max_pos-4
-    else:
-        return max(tot_score)
+    
+    return max(tot_score)
 
 
 def max_score_kmer_pos(kmerdict, seq):
@@ -240,6 +240,9 @@ def apply_get_shape(bed_df, shape="Roll"):
     mean_shape = test.fillna(0)
     
     return mean_shape
+
+##Leave these here for a larger scale analsysis
+
 # def get_mean_shape(ch, start, end):
 #     """
 #     Extract the maximum fold enrichment from Bigwig files
@@ -330,7 +333,7 @@ def get_max_dnase(ch, start, end):
     Should open a new file handle
     for each run. 
     """
-    bw = pyBigWig.open("../Data/DNase/wgEncodeRegDnaseClusteredV3.bigwig")
+    bw = pyBigWig.open("%s/Data/DNase/wgEncodeRegDnaseClusteredV3.bigwig" % BASE_DIR)
     try:
         return np.mean(bw.values(ch, start, end))
     except RuntimeError:
@@ -372,7 +375,7 @@ def apply_get_phatscon(bed_df, con_type="phastCons"):
     Get max DNase fold enrichment over the whole
     dataframe using pandas apply function
     """
-    con_file = "../Data/phatsCos/hg19.100way.%s.bw" % con_type
+    con_file = "%s/Data/Conservation/hg19.100way.%s.bw" % (BASE_DIR,con_type)
     test = bed_df.apply(lambda row: get_max_phatscon(con_file, row[0], row[1], row[2]), axis=1)
     
     mean_shape = test.fillna(0)
@@ -403,7 +406,7 @@ def insensitive_glob(pattern):
 
 def get_contigmers(tf):
     
-    contig_path = "../Data/PBM_2016/All_Contig8mers/*/*%s*" % tf.capitalize()
+    contig_path = "%s/Data/PBM_2016/All_Contig8mers/*/*%s*" % (BASE_DIR,tf.capitalize())
     return insensitive_glob(contig_path)
 
 def get_peak_files(tf):
@@ -453,7 +456,7 @@ def remove_repeats(dfs):
     Takes a bed file dataframe and eliminated bed
     coordinates that fall within the repeat masked sections
     """
-    repeats = pd.read_table("../Data/repeat_sites.bed", header=None)
+    repeats = pd.read_table("%s/Data/repeat_sites.bed" % BASE_DIR, header=None)
     repeats = pybedtools.BedTool.from_dataframe(repeats)
     
     a = pybedtools.BedTool.from_dataframe(dfs)
@@ -473,9 +476,9 @@ def get_combined_bed(peak):
     trim_to = min(len(peak_file), len(neg_bed))
     trim_to = trim_to/2
     pos_bed = peak_file.head(trim_to)
-    pos_bed.sort_values(by=["chrom", "start","end"], inplace=True)
+    pos_bed = pos_bed.sort_values(by=["chrom", "start","end"])
     neg_bed = neg_bed.head(trim_to)
-    neg_bed.sort_values(by=["chrom", "start","end"], inplace=True)
+    neg_bed = neg_bed.sort_values(by=["chrom", "start","end"])
 
     combined_bed = pos_bed.append(neg_bed, ignore_index=True)
     
@@ -503,7 +506,7 @@ def get_distance_to_tss(bed):
     midpoint to the nearest TSS
     
     """
-    tss = pd.read_table("../Data/Tss_hg19_refseq", header=None)
+    tss = pd.read_table("%s/Data/Tss_hg19_refseq" % BASE_DIR, header=None)
     tss[2] = tss[1] + 1
     tss[1] = tss[1] - 1
     tss = tss.sort_values(by=[0,1,2], kind="mergesort")
@@ -559,18 +562,6 @@ import rpy2.robjects as ro
 
 import matplotlib.pyplot as plt
 
-# Main SVM module and grid search function
-from sklearn import svm, grid_search
-
-from sklearn.linear_model import SGDClassifier
-from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
-#For partitioning the data
-from sklearn.cross_validation import train_test_split
-from sklearn.cross_validation import cross_val_score, KFold
-
-#Libsvm format data loading
-from sklearn.datasets import load_svmlight_file
-
 #Accuracy metrics
 from sklearn.metrics import accuracy_score, classification_report, auc
 
@@ -603,7 +594,7 @@ def train_xgboost(dataframe, y, tf):
     #joblib.dump(final_gb, "%s/annotations/%s/%s_xgboost.dat" % (BASE_DIR, tfs, tfs))
     
     #Creat a feature importance plot
-    plot_feature_importance(final_gb, "%s_features.png" % tf)
+    plot_feature_importance(final_gb, "%s/Results/%s_features.png" % (BASE_DIR,tf))
     
     return final_gb
 
