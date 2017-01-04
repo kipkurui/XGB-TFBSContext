@@ -593,7 +593,7 @@ def train_xgboost(dataframe, y, tf):
     #joblib.dump(final_gb, "%s/annotations/%s/%s_xgboost.dat" % (BASE_DIR, tfs, tfs))
     
     #Creat a feature importance plot
-    plot_feature_importance(final_gb, "%s/Results/%s_features.png" % (BASE_DIR,tf))
+    #plot_feature_importance(final_gb, "%s/Results/%s_features.png" % (BASE_DIR,tf))
     
     return final_gb
 

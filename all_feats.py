@@ -47,7 +47,6 @@ def get_feature_df(tf, pos):
     double_deal = test_score.apply(pd.Series)
     feature_frame ["max_kmer_score_pos"] = double_deal[0]
     hits_df = get_hits_df(double_deal, combined_bed)
-    print hits_df.head()
     feature_frame["dnase"] = apply_get_max_dnase(hits_df)
     feature_frame["phatsCons"] = apply_get_phatscon(hits_df)
     feature_frame["phyloP100way"] = apply_get_phatscon(hits_df, "phyloP100way")
@@ -112,6 +111,7 @@ with open("%s/Results/TF_scores_feature_importance_recursive_pop2.txt" % BASE_DI
     for j in feat_list:
         tf_scores.write("%s\t" % j)
     for tf in tf_in_pbm_chip:
+		print tf
         tf_scores.write("\n%s\t" % tf)
         #tf_feats.write("\n%s\t" % tf)
         pybedtools.cleanup()
