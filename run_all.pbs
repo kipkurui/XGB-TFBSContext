@@ -19,4 +19,4 @@ module load gcc/6.1.0
 source activate dream_challenge
 
 
-python /mnt/lustre/users/ckibet/Dream_challenge/code/all_feats.py
+python /mnt/lustre/users/ckibet/XGB-TFBSContext/all_feats.py
