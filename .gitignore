@@ -3,5 +3,6 @@ Data/phatsCons/*
 Data/PBM_2016/*
 *.pyc
 *~
+Data/Conservation/*
+Data/Downloaded/*
 .ipynb_checkpoints/
-

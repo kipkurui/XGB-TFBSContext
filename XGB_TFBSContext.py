@@ -12,13 +12,12 @@ import pyBigWig
 import pysam
 pd.set_option('display.max_colwidth', -1)
 
-BASE_DIR = "/home/kipkurui/Project/PBMDNase"
+BASE_DIR = "/home/ckibet/lustre/XGB-TFBSContext"
 
-shape_path = "/home/kipkurui/Dream_challenge/DNAShape"
+shape_path = "/home/ckibet/lustre/Dream_challenge/DNAShape"
+human_genome = "/home/ckibet/lustre/Dream_challenge/annotations"
+chipseq_path = "/home/ckibet/lustre/XGB-TFBSContext/Data/Downloaded"
 
-human_genome = "/home/kipkurui/Dream_challenge/annotations"
-
-chipseq_path = "/home/kipkurui/Project/MARS/Data/ChIP-seq/Downloaded"
 
 revcompl = lambda x: ''.join([{'A':'T','C':'G','G':'C','T':'A'}[B] for B in x][::-1])
 

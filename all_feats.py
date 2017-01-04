@@ -15,9 +15,9 @@ import xgboost as xgb
 
 from XGB_TFBSContext import *
 
-shape_path = "/home/kipkurui/Dream_challenge/DNAShape"
-human_genome = "/home/kipkurui/Dream_challenge/annotations"
-chipseq_path = "/home/kipkurui/Project/MARS/Data/ChIP-seq/Downloaded"
+shape_path = "/home/ckibet/lustre/Dream_challenge/DNAShape"
+human_genome = "/home/ckibet/lustre/Dream_challenge/annotations"
+chipseq_path = "/home/ckibet/lustre/XGB-TFBSContext/Data/Downloaded"
 
 
 dn_hg_dict, kmer_name = get_kmer_dict_rev("%s/Data/dn_hg_max_normalized.txt" % BASE_DIR, "test")
