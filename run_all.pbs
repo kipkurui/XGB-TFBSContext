@@ -1,0 +1,22 @@
+#!/bin/sh
+##PBS -o localhost:/mnt/lustre/users/ckibet/XGB-TFBSContext/log.txt
+##PBS -e localhost:/mnt/lustre/users/ckibet/XGB-TFBSContext/error.txt
+
+#PBS-P CBBI0922
+#PBS -l select=1:ncpus=24:mpiprocs=12:nodetype=haswell_reg
+#PBS -l walltime=96:00:00
+#PBS -q smp
+#PBS -m abe
+#PBS -N all_features
+#PBS -M calebkibet88@gmail.com
+
+cd /mnt/lustre/users/ckibet/XGB-TFBSContext
+
+#Load modules
+
+module load gcc/6.1.0 
+
+source activate dream_challenge
+
+
+python /mnt/lustre/users/ckibet/Dream_challenge/code/all_feats.py
