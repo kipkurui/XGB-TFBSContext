@@ -111,7 +111,6 @@ with open("%s/Results/TF_scores_feature_importance_recursive_pop2.txt" % BASE_DI
     for j in feat_list:
         tf_scores.write("%s\t" % j)
     for tf in tf_in_pbm_chip:
-		print tf
         tf_scores.write("\n%s\t" % tf)
         #tf_feats.write("\n%s\t" % tf)
         pybedtools.cleanup()
