@@ -193,10 +193,10 @@ with open("%s/Results/test.txt" % BASE_DIR, "w") as tf_scores:
         print tf
         pybedtools.cleanup()
         
-        #feature_frame, trim_to = get_feature_df(tf, 0)
-        #feature_frame_p,trim_to_p =  get_feature_df(tf, -1)
-        #y_train = np.concatenate((np.ones(trim_to), np.zeros(trim_to)), axis=0)
-        #y_test = np.concatenate((np.ones(trim_to_p), np.zeros(trim_to_p)), axis=0)
+        feature_frame, trim_to = get_feature_df(tf, 0)
+        feature_frame_p,trim_to_p =  get_feature_df(tf, -1)
+        y_train = np.concatenate((np.ones(trim_to), np.zeros(trim_to)), axis=0)
+        y_test = np.concatenate((np.ones(trim_to_p), np.zeros(trim_to_p)), axis=0)
         
         #all_feats = list(feature_frame.columns)
         
@@ -205,8 +205,6 @@ with open("%s/Results/test.txt" % BASE_DIR, "w") as tf_scores:
 #         testdmat = xgb.DMatrix(feature_frame_p[all_feats], y_test)
 #         y_pred = my_model.predict(testdmat)
 
-        
-        
         
         feature_frame = feature_frame.fillna(0)
         feature_frame_p = feature_frame_p.fillna(0)
