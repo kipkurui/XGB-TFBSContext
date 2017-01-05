@@ -103,7 +103,7 @@ from xgboost import XGBClassifier
 
 import xgboost as xgb
 
-from from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 def train_sgd(feature_frame, feature_frame_p, y_train, y_test):
     scaler = MinMaxScaler()
