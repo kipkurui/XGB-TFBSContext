@@ -597,6 +597,7 @@ def train_xgboost(dataframe, y, tf):
     
     return final_gb
 
+d
 
 def plot_feature_importance(xgb_model, fig_out):
     sns.set(font_scale = 1.5)

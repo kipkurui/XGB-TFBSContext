@@ -78,6 +78,8 @@ def pop_this(feat):
         except ValueError:
             pass
 
+
+
 feat_list = ['max_kmer_score','dnase','sum_kmer_score',"phatsCons",
  'Roll', 'ProT', 'MGW', 'HelT',
  'max_kmer_score_pos','dn_hg_score',
@@ -105,37 +107,42 @@ tf_in_pbm_chip = ['Ap2',
  'Tbp',
  'Tcf7l2']
 
-with open("%s/Results/TF_scores_feature_importance_recursive_pop2.txt" % BASE_DIR, "a") as tf_scores:
+
+
+with open("%s/Results/test.txt" % BASE_DIR, "w") as tf_scores:
     
-    tf_scores.write("Tf_name\tAll\t")
-    for j in feat_list:
+    tf_scores.write("Tf_name\t")
+    for j in "sgd, svm, xgbb, gradient".split():
         tf_scores.write("%s\t" % j)
     for tf in tf_in_pbm_chip:
         tf_scores.write("\n%s\t" % tf)
         #tf_feats.write("\n%s\t" % tf)
+        print tf
         pybedtools.cleanup()
         
-        feature_frame, trim_to = get_feature_df(tf, 0)
-        feature_frame_p,trim_to_p =  get_feature_df(tf, -1)
-        y_train = np.concatenate((np.ones(trim_to), np.zeros(trim_to)), axis=0)
-        y_test = np.concatenate((np.ones(trim_to_p), np.zeros(trim_to_p)), axis=0)
+        #feature_frame, trim_to = get_feature_df(tf, 0)
+        #feature_frame_p,trim_to_p =  get_feature_df(tf, -1)
+        #y_train = np.concatenate((np.ones(trim_to), np.zeros(trim_to)), axis=0)
+        #y_test = np.concatenate((np.ones(trim_to_p), np.zeros(trim_to_p)), axis=0)
         
-        all_feats = list(feature_frame.columns)
+        #all_feats = list(feature_frame.columns)
         
         #All
-        my_model = train_xgboost(feature_frame[all_feats], y_train, tf)
-        testdmat = xgb.DMatrix(feature_frame_p[all_feats], y_test)
-        y_pred = my_model.predict(testdmat)
-        tf_scores.write("%s\t" % (roc_auc_score(y_test, y_pred)))
+#         my_model = train_xgboost(feature_frame[all_feats], y_train, tf)
+#         testdmat = xgb.DMatrix(feature_frame_p[all_feats], y_test)
+#         y_pred = my_model.predict(testdmat)
+
         
-        for feats in feat_list:
-            all_feats = list(feature_frame.columns)
-            pop_this(feats)
-            my_model = train_xgboost(feature_frame[all_feats], y_train, tf)
-            
-            testdmat = xgb.DMatrix(feature_frame_p[all_feats], y_test)
-
-            y_pred = my_model.predict(testdmat)
-
-            tf_scores.write("%s\t" % (roc_auc_score(y_test, y_pred)))
+        
+        
+        feature_frame = feature_frame.fillna(0)
+        feature_frame_p = feature_frame_p.fillna(0)
+        
+        sgd = train_sgd(feature_frame, feature_frame_p, y_train, y_test)
+        svms = train_svm(feature_frame, feature_frame_p, y_train, y_test)
+        xgb = train_xgb(feature_frame, feature_frame_p, y_train, y_test)
+        gradient = train_gradient(feature_frame, feature_frame_p, y_train, y_test)
+        
+        for mod in [sgd, svms, xgb, gradient]:
+            tf_scores.write("%.4f\t" % mod)
 

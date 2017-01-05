@@ -7,7 +7,7 @@
 #PBS -l walltime=12:00:00
 #PBS -q smp
 #PBS -m abe
-#PBS -N all_features
+#PBS -N test_models
 #PBS -M calebkibet88@gmail.com
 
 cd /mnt/lustre/users/ckibet/XGB-TFBSContext
@@ -19,4 +19,4 @@ module load gcc/6.1.0
 source activate dream_challenge
 
 
-python /mnt/lustre/users/ckibet/XGB-TFBSContext/all_feats.py
+python /mnt/lustre/users/ckibet/XGB-TFBSContext/test_xgb_svm_gbc_sgd.py
