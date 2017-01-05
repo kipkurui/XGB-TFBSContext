@@ -78,7 +78,80 @@ def pop_this(feat):
         except ValueError:
             pass
 
+from sklearn import svm, grid_search
 
+from sklearn.linear_model import SGDClassifier
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
+#For partitioning the data
+from sklearn.cross_validation import train_test_split
+from sklearn.cross_validation import cross_val_score, KFold
+
+#Libsvm format data loading
+from sklearn.datasets import load_svmlight_file
+
+#Accuracy metrics
+from sklearn.metrics import accuracy_score, classification_report, auc
+
+# Creating an learning pipeline
+from sklearn.pipeline import Pipeline
+
+from sklearn import feature_selection
+
+from sklearn.externals import joblib
+
+from xgboost import XGBClassifier
+
+import xgboost as xgb
+
+def train_sgd(feature_frame, feature_frame_p, y_train, y_test):
+    scaler = MinMaxScaler()
+    #Scale the train data
+    scaler.fit(feature_frame) 
+    X_train = scaler.transform(feature_frame)
+
+    #Scale the test data as well
+    scaler.fit(feature_frame_p)
+    X_test = scaler.transform(feature_frame_p)
+    
+    clf = SGDClassifier()
+    clf.fit(X_train, y_train)
+    pred_sgd = clf.predict(X_test)
+    
+    return roc_auc_score(y_test, pred_sgd)
+
+def train_svm(feature_frame, feature_frame_p, y_train, y_test):
+    scaler = MinMaxScaler()
+    #Scale the train data
+    scaler.fit(feature_frame) 
+    X_train = scaler.transform(feature_frame)
+
+    #Scale the test data as well
+    scaler.fit(feature_frame_p)
+    X_test = scaler.transform(feature_frame_p)
+    
+    clf = svm.SVC()
+    clf.fit(X_train, y_train)
+    pred_svm = clf.predict(X_test)
+    
+    return roc_auc_score(y_test, pred_svm)
+
+def train_xgb(feature_frame,feature_frame_p,y_train, y_test):
+    
+    xgdmat = xgb.DMatrix(feature_frame, y_train) 
+    our_params = {'eta': 0.3, 'seed':0, 'subsample': 1, 'colsample_bytree': 1, 
+                 'objective': 'binary:logistic', 'max_depth':6, 'min_child_weight':1} 
+    my_model = xgb.train(our_params,xgdmat)
+    testdmat = xgb.DMatrix(feature_frame_p, y_test)
+    y_pred = my_model.predict(testdmat)
+    
+    return roc_auc_score(y_test, y_pred)
+
+def train_gradient(feature_frame,feature_frame_p,y_train, y_test):
+    clf = GradientBoostingClassifier()
+    clf.fit(feature_frame, y_train)
+    pred_sgd = clf.predict(feature_frame_p)
+
+    return roc_auc_score(y_test, pred_sgd)
 
 feat_list = ['max_kmer_score','dnase','sum_kmer_score',"phatsCons",
  'Roll', 'ProT', 'MGW', 'HelT',
