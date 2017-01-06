@@ -187,7 +187,7 @@ tf_in_pbm_chip = ['Ap2',
 with open("%s/Results/test.txt" % BASE_DIR, "w") as tf_scores:
     
     tf_scores.write("Tf_name\t")
-    for j in "sgd, svm, xgbb, gradient".split():
+    for j in "sgd, svms, xgboost, gradient".split():
         tf_scores.write("%s\t" % j)
     for tf in tf_in_pbm_chip:
         tf_scores.write("\n%s\t" % tf)
@@ -213,9 +213,9 @@ with open("%s/Results/test.txt" % BASE_DIR, "w") as tf_scores:
         
         sgd = train_sgd(feature_frame, feature_frame_p, y_train, y_test)
         svms = train_svm(feature_frame, feature_frame_p, y_train, y_test)
-        xgb = train_xgb(feature_frame, feature_frame_p, y_train, y_test)
+        xgboost = train_xgb(feature_frame, feature_frame_p, y_train, y_test)
         gradient = train_gradient(feature_frame, feature_frame_p, y_train, y_test)
         
-        for mod in [sgd, svms, xgb, gradient]:
+        for mod in [sgd, svms, xgboost, gradient]:
             tf_scores.write("%.4f\t" % mod)
 
