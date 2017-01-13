@@ -13,7 +13,7 @@ pd.set_option('display.max_colwidth', -1)
 import matplotlib.pyplot as plt
 import xgboost as xgb
 
-from XGB_TFBSContext import *
+from code.XGB_TFBSContext import *
 
 shape_path = "/home/ckibet/lustre/Dream_challenge/DNAShape"
 human_genome = "/home/ckibet/lustre/Dream_challenge/annotations"
